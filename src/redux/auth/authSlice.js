@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { initAuth } from 'redux/initial';
-import { register, logIn, logOut, refreshUser } from './operations';
+import { register, logIn, logOut, refreshUser } from './authOperations';
 
 const handleRegister = (state, { payload }) => {
   state.user = payload.user;
