@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchContacts } from 'redux/contacts/operations';
+import { fetchContacts } from 'redux/contacts/contactsOperations';
 
 import Title from 'components/Title/Title';
 import NewContactForm from 'components/NewContactForm/NewContactForm';

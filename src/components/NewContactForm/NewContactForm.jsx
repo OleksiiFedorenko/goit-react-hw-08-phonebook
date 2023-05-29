@@ -1,10 +1,10 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Formik } from 'formik';
-import * as yup from 'yup';
 
-import { selectContacts } from 'redux/contacts/selectors';
-import { addContact } from 'redux/contacts/operations';
+import { selectContacts } from 'redux/contacts/contactsSelectors';
+import { addContact } from 'redux/contacts/contactsOperations';
+import { contactValidationSchema } from 'common/validation';
 import {
   ContactForm,
   Label,
@@ -12,26 +12,6 @@ import {
   FormError,
   Button,
 } from './NewContactForm.styled';
-
-const nameRegex =
-  /^[a-zA-Zа-яґєіїА-ЯҐЄІЇ]+(([' -][a-zA-Zа-яґєіїА-ЯҐЄІЇ ])?[a-zA-Zа-яґєіїА-ЯҐЄІЇ]*)*$/;
-const nameWarningMessage =
-  "Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan";
-const numberRegex =
-  /\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/;
-const numberWarningMessage =
-  'Phone number must be at least 5 digits and can contain spaces, dashes, parentheses and can start with +';
-
-const validationSchema = yup.object().shape({
-  name: yup
-    .string()
-    .matches(nameRegex, nameWarningMessage)
-    .required('Please add name'),
-  number: yup
-    .string()
-    .matches(numberRegex, numberWarningMessage)
-    .required('Please add phone number'),
-});
 
 const NewContactForm = () => {
   const dispatch = useDispatch();
@@ -54,7 +34,7 @@ const NewContactForm = () => {
   return (
     <Formik
       initialValues={{ name: '', number: '' }}
-      validationSchema={validationSchema}
+      validationSchema={contactValidationSchema}
       onSubmit={handleSubmit}
     >
       <ContactForm>

@@ -1,73 +1,91 @@
 import { useDispatch } from 'react-redux';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as yup from 'yup';
-
+import { toast } from 'react-toastify';
+import { Formik, Form, Field } from 'formik';
 import { register } from 'redux/auth/authOperations';
-
-const nameRegex =
-  /^[a-zA-Zа-яґєіїА-ЯҐЄІЇ]+(([' -][a-zA-Zа-яґєіїА-ЯҐЄІЇ ])?[a-zA-Zа-яґєіїА-ЯҐЄІЇ]*)*$/;
-const nameWarningMessage =
-  "Name may contain only letters, apostrophe, dash and spaces. For example Jacob Mercer, Charles de Castelmore d'Artagnan";
-const emailRegex =
-  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const emailWarningMessage =
-  "Email address must include letters/digits, '@' symbol, and valid domain. Periods, underscores, hyphens can be also used. For example email@gmail.com";
-// password regex: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
-// 8 characters: at least one digit, one lower case, one upper case
-const passwordRegex = /.{8,}/;
-const passwordWarningMessage = 'Password must be at least 8 characters';
-
-const validationSchema = yup.object().shape({
-  name: yup
-    .string()
-    .matches(nameRegex, nameWarningMessage)
-    .required('Please enter your name'),
-  email: yup
-    .string()
-    .matches(emailRegex, emailWarningMessage)
-    .required('Please enter your email'),
-  password: yup
-    .string()
-    .matches(passwordRegex, passwordWarningMessage)
-    .required('Please enter your password'),
-});
+import { registerValidationSchema } from 'common/validation';
+import {
+  Box,
+  VStack,
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  Input,
+  Button,
+} from '@chakra-ui/react';
 
 const RegisterForm = () => {
   const dispatch = useDispatch();
 
-  const handleSubmit = (credentials, { resetForm }) => {
-    dispatch(register(credentials));
-    resetForm();
+  const handleSubmit = async (credentials, { resetForm }) => {
+    try {
+      const res = await dispatch(register(credentials)).unwrap();
+      toast.success(
+        `Welcome, ${res.user.name}. We hope you'll like our service!`
+      );
+      resetForm();
+    } catch (error) {
+      if (error.code === 11000)
+        return toast.error(
+          `The user with email ${error.keyValue.email} already exists. Please log in or try different email.`
+        );
+      toast.error('Something went wrong. Please try agail later.');
+    }
   };
 
   return (
-    <Formik
-      initialValues={{ name: '', email: '', password: '' }}
-      validationSchema={validationSchema}
-      onSubmit={handleSubmit}
-    >
-      <Form>
-        <label>
-          Name
-          <Field type="text" name="name" />
-          <ErrorMessage name="name" component="div" />
-        </label>
+    <Box bg="white" p={6} rounded="md" w="300px">
+      <Formik
+        initialValues={{ name: '', email: '', password: '' }}
+        validationSchema={registerValidationSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ errors, touched }) => (
+          <Form>
+            <VStack spacing={4} align="flex-start">
+              <FormControl isInvalid={!!errors.name && touched.name}>
+                <FormLabel htmlFor="name">Name</FormLabel>
+                <Field
+                  as={Input}
+                  id="name"
+                  name="name"
+                  type="text"
+                  variant="filled"
+                />
+                <FormErrorMessage>{errors.name}</FormErrorMessage>
+              </FormControl>
 
-        <label>
-          Email
-          <Field type="email" name="email" />
-          <ErrorMessage name="email" component="div" />
-        </label>
+              <FormControl isInvalid={!!errors.email && touched.email}>
+                <FormLabel htmlFor="email">Email</FormLabel>
+                <Field
+                  as={Input}
+                  id="email"
+                  name="email"
+                  type="email"
+                  variant="filled"
+                />
+                <FormErrorMessage>{errors.email}</FormErrorMessage>
+              </FormControl>
 
-        <label>
-          Password
-          <Field type="text" name="password" />
-          <ErrorMessage name="password" component="div" />
-        </label>
+              <FormControl isInvalid={!!errors.password && touched.password}>
+                <FormLabel htmlFor="password">Password</FormLabel>
+                <Field
+                  as={Input}
+                  id="password"
+                  name="password"
+                  type="text"
+                  variant="filled"
+                />
+                <FormErrorMessage>{errors.password}</FormErrorMessage>
+              </FormControl>
 
-        <button type="submit">Register</button>
-      </Form>
-    </Formik>
+              <Button type="submit" colorScheme="blue" width="full">
+                Register
+              </Button>
+            </VStack>
+          </Form>
+        )}
+      </Formik>
+    </Box>
   );
 };
 

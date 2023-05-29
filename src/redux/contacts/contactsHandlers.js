@@ -1,4 +1,4 @@
-import { fetchContacts, addContact, deleteContact } from './operations';
+import { fetchContacts, addContact, deleteContact } from './contactsOperations';
 
 const thunks = [fetchContacts, addContact, deleteContact];
 export const thunksStatuses = status => thunks.map(thunk => thunk[status]);

@@ -1,6 +1,6 @@
 import { createSlice, isAnyOf } from '@reduxjs/toolkit';
 import { initContacts } from '../initial';
-import { fetchContacts, addContact, deleteContact } from './operations';
+import { fetchContacts, addContact, deleteContact } from './contactsOperations';
 import {
   thunksStatuses,
   handleFetch,
@@ -9,7 +9,7 @@ import {
   handlePending,
   handleSuccess,
   handleError,
-} from './handlers';
+} from './contactsHandlers';
 
 const contactsSlice = createSlice({
   name: 'contacts',
