@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser } from 'redux/auth/authSelectors';
 import { logOut } from 'redux/auth/authOperations';
+import * as create from 'common/toastCreator';
 import { Flex, Avatar, Text, Button, useToast } from '@chakra-ui/react';
 
 const UserMenu = () => {
@@ -11,21 +12,9 @@ const UserMenu = () => {
   const handleClick = async () => {
     try {
       await dispatch(logOut()).unwrap();
-      toast({
-        title: 'See you later!',
-        status: 'success',
-        variant: 'subtle',
-        position: 'top',
-        isClosable: true,
-      });
+      toast(create.success('See you later!'));
     } catch (error) {
-      toast({
-        title: 'Something went wrong. Please try agail later.',
-        status: 'error',
-        variant: 'subtle',
-        position: 'top',
-        isClosable: true,
-      });
+      toast(create.error('Something went wrong. Please try agail later.'));
     }
   };
 

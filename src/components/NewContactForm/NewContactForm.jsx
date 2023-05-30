@@ -4,6 +4,7 @@ import { Formik, Form, Field } from 'formik';
 import { selectContacts } from 'redux/contacts/contactsSelectors';
 import { addContact } from 'redux/contacts/contactsOperations';
 import { contactValidationSchema } from 'common/validation';
+import * as create from 'common/toastCreator';
 import {
   Box,
   Heading,
@@ -12,9 +13,10 @@ import {
   FormLabel,
   FormErrorMessage,
   Input,
-  Button,
+  IconButton,
   useToast,
 } from '@chakra-ui/react';
+import { AddIcon } from '@chakra-ui/icons';
 
 const NewContactForm = () => {
   const dispatch = useDispatch();
@@ -26,24 +28,11 @@ const NewContactForm = () => {
     if (
       contacts.some(contact => contact.name.toLowerCase() === normalizedName)
     ) {
-      toast({
-        title: `${name} is already in contacts.`,
-        status: 'warning',
-        variant: 'subtle',
-        position: 'top',
-        isClosable: true,
-      });
-      return;
+      return toast(create.warning(`${name} is already in contacts.`));
     }
 
     dispatch(addContact({ name, number }));
-    toast({
-      title: `${name} is added to contacts.`,
-      status: 'success',
-      variant: 'subtle',
-      position: 'top',
-      isClosable: true,
-    });
+    toast(create.success(`${name} is added to contacts.`));
     resetForm();
   };
 
@@ -85,9 +74,15 @@ const NewContactForm = () => {
                 <FormErrorMessage>{errors.number}</FormErrorMessage>
               </FormControl>
 
-              <Button type="submit" colorScheme="blue" width="full">
+              {/* <Button type="submit" colorScheme="blue" width="full">
                 Add contact
-              </Button>
+              </Button> */}
+              <IconButton
+                type="submit"
+                colorScheme="blue"
+                width="full"
+                icon={<AddIcon />}
+              />
             </VStack>
           </Form>
         )}

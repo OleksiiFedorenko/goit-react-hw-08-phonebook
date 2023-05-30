@@ -2,6 +2,7 @@ import { useDispatch } from 'react-redux';
 import { Formik, Form, Field } from 'formik';
 import { register } from 'redux/auth/authOperations';
 import { registerValidationSchema } from 'common/validation';
+import * as create from 'common/toastCreator';
 import {
   Box,
   VStack,
@@ -20,32 +21,18 @@ const RegisterForm = () => {
   const handleSubmit = async (credentials, { resetForm }) => {
     try {
       const res = await dispatch(register(credentials)).unwrap();
-      toast({
-        title: `Welcome, ${res.user.name}. We hope you'll like our service!`,
-        status: 'success',
-        variant: 'subtle',
-        position: 'top',
-        isClosable: true,
-      });
+      toast(
+        create.success(
+          `Welcome, ${res.user.name}. We hope you'll like our service!`
+        )
+      );
       resetForm();
     } catch (error) {
-      if (error.code === 11000) {
-        return toast({
-          title: `The user with email ${error.keyValue.email} already exists. Please log in or try different email.`,
-          status: 'error',
-          variant: 'subtle',
-          position: 'top',
-          isClosable: true,
-        });
-      }
+      let message = 'Something went wrong. Please try agail later.';
+      if (error.code === 11000)
+        message = `The user with email ${error.keyValue.email} already exists. Please log in or try different email.`;
 
-      toast({
-        title: 'Something went wrong. Please try agail later.',
-        status: 'error',
-        variant: 'subtle',
-        position: 'top',
-        isClosable: true,
-      });
+      toast(create.error(message));
     }
   };
 

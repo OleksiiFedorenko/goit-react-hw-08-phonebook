@@ -2,6 +2,7 @@ import { useDispatch } from 'react-redux';
 import { Formik, Form, Field } from 'formik';
 import { logIn } from 'redux/auth/authOperations';
 import { loginValidationSchema } from 'common/validation';
+import * as create from 'common/toastCreator';
 import {
   Box,
   VStack,
@@ -20,32 +21,13 @@ const LoginForm = () => {
   const handleSubmit = async (credentials, { resetForm }) => {
     try {
       const res = await dispatch(logIn(credentials)).unwrap();
-      toast({
-        title: `Welcome back, ${res.user.name}!`,
-        status: 'success',
-        variant: 'subtle',
-        position: 'top',
-        isClosable: true,
-      });
+      toast(create.success(`Welcome back, ${res.user.name}!`));
       resetForm();
     } catch (error) {
-      if (error.status === 400) {
-        return toast({
-          title: 'The email or password is incorrect.',
-          status: 'error',
-          variant: 'subtle',
-          position: 'top',
-          isClosable: true,
-        });
-      }
+      let message = 'Something went wrong. Please try agail later.';
+      if (error.status === 400) message = 'The email or password is incorrect.';
 
-      toast({
-        title: 'Something went wrong. Please try agail later.',
-        status: 'error',
-        variant: 'subtle',
-        position: 'top',
-        isClosable: true,
-      });
+      toast(create.error(message));
     }
   };
 
