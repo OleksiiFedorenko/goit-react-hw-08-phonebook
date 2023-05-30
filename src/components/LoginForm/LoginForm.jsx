@@ -1,5 +1,4 @@
 import { useDispatch } from 'react-redux';
-import { toast } from 'react-toastify';
 import { Formik, Form, Field } from 'formik';
 import { logIn } from 'redux/auth/authOperations';
 import { loginValidationSchema } from 'common/validation';
@@ -11,20 +10,42 @@ import {
   FormErrorMessage,
   Input,
   Button,
+  useToast,
 } from '@chakra-ui/react';
 
 const LoginForm = () => {
   const dispatch = useDispatch();
+  const toast = useToast();
 
   const handleSubmit = async (credentials, { resetForm }) => {
     try {
       const res = await dispatch(logIn(credentials)).unwrap();
-      toast.success(`Welcome back, ${res.user.name}!`);
+      toast({
+        title: `Welcome back, ${res.user.name}!`,
+        status: 'success',
+        variant: 'subtle',
+        position: 'top',
+        isClosable: true,
+      });
       resetForm();
     } catch (error) {
-      if (error.status === 400)
-        return toast.error('The email or password is incorrect.');
-      toast.error('Something went wrong. Please try agail later.');
+      if (error.status === 400) {
+        return toast({
+          title: 'The email or password is incorrect.',
+          status: 'error',
+          variant: 'subtle',
+          position: 'top',
+          isClosable: true,
+        });
+      }
+
+      toast({
+        title: 'Something went wrong. Please try agail later.',
+        status: 'error',
+        variant: 'subtle',
+        position: 'top',
+        isClosable: true,
+      });
     }
   };
 
@@ -56,7 +77,7 @@ const LoginForm = () => {
                   as={Input}
                   id="password"
                   name="password"
-                  type="text"
+                  type="password"
                   variant="filled"
                 />
                 <FormErrorMessage>{errors.password}</FormErrorMessage>

@@ -1,24 +1,41 @@
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { deleteContact } from 'redux/contacts/contactsOperations';
-import { toast } from 'react-toastify';
-import { Button } from './ContactListItem.styled';
+import { Flex, Box, Heading, Text, Button, useToast } from '@chakra-ui/react';
 
 const ContactListItem = ({ contact }) => {
   const dispatch = useDispatch();
+  const toast = useToast();
   const { id, name, number } = contact;
+
   const handleDelete = () => {
     dispatch(deleteContact(id));
-    toast.error(`${name} was removed from contacts.`);
+    toast({
+      title: `${name} was removed from contacts.`,
+      status: 'error',
+      variant: 'subtle',
+      position: 'top',
+      isClosable: true,
+    });
   };
 
   return (
-    <>
-      {name}: {number}
-      <Button type="button" onClick={handleDelete}>
+    <Flex justify="space-between" align="center" gap="12px">
+      <Box>
+        <Heading size="sm">{name}</Heading>
+        <Text pt="2" fontSize="md">
+          {number}
+        </Text>
+      </Box>
+      <Button
+        type="button"
+        onClick={handleDelete}
+        colorScheme="red"
+        variant="ghost"
+      >
         Delete
       </Button>
-    </>
+    </Flex>
   );
 };
 

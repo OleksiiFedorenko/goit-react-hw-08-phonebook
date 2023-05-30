@@ -9,6 +9,7 @@ import PrivateRoute from 'components/Routes/PrivateRoute';
 import PublicRoute from 'components/Routes/PublicRoute';
 import Loader from 'components/Loader/Loader';
 
+const Home = lazy(() => import('../../pages/Home/Home'));
 const Register = lazy(() => import('../../pages/Register/Register'));
 const Login = lazy(() => import('../../pages/Login/Login'));
 const Contacts = lazy(() => import('../../pages/Contacts/Contacts'));
@@ -26,6 +27,7 @@ const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
         <Route
           path="contacts"
           element={

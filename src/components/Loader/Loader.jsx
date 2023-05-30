@@ -1,20 +1,20 @@
 import { Grid } from 'react-loader-spinner';
-import { LoaderConainer } from './Loader.styled';
+import { Center } from '@chakra-ui/react';
 
 const Loader = () => {
   return (
-    <LoaderConainer>
+    <Center mt="12px">
       <Grid
         height="80"
         width="80"
-        color="#4782ef"
+        color="#3186ce"
         ariaLabel="grid-loading"
         radius="12.5"
         wrapperStyle={{}}
         wrapperClass=""
         visible={true}
       />
-    </LoaderConainer>
+    </Center>
   );
 };
 

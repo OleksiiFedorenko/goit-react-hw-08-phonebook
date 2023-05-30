@@ -7,8 +7,7 @@ import {
 } from 'redux/contacts/contactsSelectors';
 import ContactListItem from 'components/ContactListItem/ContactListItem';
 import Loader from 'components/Loader/Loader';
-import NoContacts from 'components/NoContacts/NoContacts';
-import { ContactsContainer } from './ContactList.styled';
+import { Stack, StackDivider, Box, Text } from '@chakra-ui/react';
 
 const ContactList = () => {
   const contacts = useSelector(selectContacts);
@@ -18,28 +17,35 @@ const ContactList = () => {
 
   if (isLoading) return <Loader />;
 
-  if (error) {
+  if (error)
     return (
-      <NoContacts message="Something went wrong, please try again later" />
+      <Text fontSize="xl" color="red.600" fontWeight="semibold">
+        Something went wrong, please try again later
+      </Text>
     );
-  }
 
-  if (filteredContacts.length === 0) {
+  if (contacts.length === 0)
     return (
-      <NoContacts
-        message={contacts.length > 0 ? 'No contacts found' : 'No contacts yet'}
-      />
+      <Text fontSize="xl" color="red.600" fontWeight="semibold">
+        No contacts yet
+      </Text>
     );
-  }
+
+  if (filteredContacts.length === 0)
+    return (
+      <Text fontSize="xl" color="red.600" fontWeight="semibold">
+        No contacts found
+      </Text>
+    );
 
   return (
-    <ContactsContainer>
+    <Stack divider={<StackDivider />} spacing="4">
       {filteredContacts.map(contact => (
-        <li key={contact.id}>
+        <Box key={contact.id}>
           <ContactListItem contact={contact} />
-        </li>
+        </Box>
       ))}
-    </ContactsContainer>
+    </Stack>
   );
 };
 

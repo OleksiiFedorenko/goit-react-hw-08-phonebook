@@ -1,5 +1,4 @@
 import { useDispatch } from 'react-redux';
-import { toast } from 'react-toastify';
 import { Formik, Form, Field } from 'formik';
 import { register } from 'redux/auth/authOperations';
 import { registerValidationSchema } from 'common/validation';
@@ -11,24 +10,42 @@ import {
   FormErrorMessage,
   Input,
   Button,
+  useToast,
 } from '@chakra-ui/react';
 
 const RegisterForm = () => {
   const dispatch = useDispatch();
+  const toast = useToast();
 
   const handleSubmit = async (credentials, { resetForm }) => {
     try {
       const res = await dispatch(register(credentials)).unwrap();
-      toast.success(
-        `Welcome, ${res.user.name}. We hope you'll like our service!`
-      );
+      toast({
+        title: `Welcome, ${res.user.name}. We hope you'll like our service!`,
+        status: 'success',
+        variant: 'subtle',
+        position: 'top',
+        isClosable: true,
+      });
       resetForm();
     } catch (error) {
-      if (error.code === 11000)
-        return toast.error(
-          `The user with email ${error.keyValue.email} already exists. Please log in or try different email.`
-        );
-      toast.error('Something went wrong. Please try agail later.');
+      if (error.code === 11000) {
+        return toast({
+          title: `The user with email ${error.keyValue.email} already exists. Please log in or try different email.`,
+          status: 'error',
+          variant: 'subtle',
+          position: 'top',
+          isClosable: true,
+        });
+      }
+
+      toast({
+        title: 'Something went wrong. Please try agail later.',
+        status: 'error',
+        variant: 'subtle',
+        position: 'top',
+        isClosable: true,
+      });
     }
   };
 
@@ -72,7 +89,7 @@ const RegisterForm = () => {
                   as={Input}
                   id="password"
                   name="password"
-                  type="text"
+                  type="password"
                   variant="filled"
                 />
                 <FormErrorMessage>{errors.password}</FormErrorMessage>

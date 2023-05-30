@@ -1,19 +1,31 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import { selectUser } from 'redux/auth/authSelectors';
 import { logOut } from 'redux/auth/authOperations';
-import { Flex, Avatar, Text, Button } from '@chakra-ui/react';
+import { Flex, Avatar, Text, Button, useToast } from '@chakra-ui/react';
 
 const UserMenu = () => {
   const dispatch = useDispatch();
   const { name, email } = useSelector(selectUser);
+  const toast = useToast();
 
   const handleClick = async () => {
     try {
       await dispatch(logOut()).unwrap();
-      toast.success('See you later!');
+      toast({
+        title: 'See you later!',
+        status: 'success',
+        variant: 'subtle',
+        position: 'top',
+        isClosable: true,
+      });
     } catch (error) {
-      toast.error('Something went wrong. Please try agail later.');
+      toast({
+        title: 'Something went wrong. Please try agail later.',
+        status: 'error',
+        variant: 'subtle',
+        position: 'top',
+        isClosable: true,
+      });
     }
   };
 
