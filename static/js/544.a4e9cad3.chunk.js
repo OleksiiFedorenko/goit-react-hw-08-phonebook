@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkreact_homework_template=self.webpackChunkreact_homework_template||[]).push([[544],{9544:function(e,t,r){r.r(t);var n=r(3329),c=r(2144),a=c.Flex,l=c.Heading,s=c.Box;t.default=function(){return(0,n.jsx)(a,{justify:"center",align:"center",bg:"gray.100",h:"93.9vh",children:(0,n.jsx)(s,{textAlign:"center",maxW:"820px",children:(0,n.jsx)(l,{as:"h1",children:"Welcome to our contacts manager service \u260e\ufe0f"})})})}}}]);
+//# sourceMappingURL=544.a4e9cad3.chunk.js.map
